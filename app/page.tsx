@@ -1,3 +1,11 @@
+import { spaceGrotesk } from "../app/layout";
+
 export default function Home() {
-  return <div className="text-3xl font-bold underline">Home</div>;
+  return (
+    <>
+      <div className={spaceGrotesk.className + " h1-bold"}>
+        TailwindCss is awesome!!!!
+      </div>
+    </>
+  );
 }
