@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter, Space_Grotesk as SpaceGrotesk } from "next/font/google";
 import { ThemeProvider } from "../components/themeProvider";
-import Navbar from "@/components/navigation/navbar";
+import { Toaster } from "sonner";
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 
 export const inter = Inter({
   subsets: ["latin"],
@@ -26,26 +28,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`antialiased ${inter.className} ${spaceGrotesk.variable}`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+      <SessionProvider session={session}>
+        <body
+          className={`antialiased ${inter.className} ${spaceGrotesk.variable}`}
+          suppressHydrationWarning
         >
-          <Navbar />
-          {children}
-        </ThemeProvider>
-      </body>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster richColors position="top-center" />
+          </ThemeProvider>
+        </body>
+      </SessionProvider>
     </html>
   );
-}
+};
+
+export default RootLayout;
