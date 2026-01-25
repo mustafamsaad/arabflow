@@ -20,7 +20,7 @@ export const spaceGrotesk = SpaceGrotesk({
 });
 
 export const metadata: Metadata = {
-  title: "ArabFlow",
+  title: "ArabOverflow",
   description:
     "An community-driven platform for arabs for asking and answering programming questions. Get help, share knowledge, and collaborate with developers from around the world. Explore topics in web development, mobile app development, algorithms, data structures, and more.",
   icons: {

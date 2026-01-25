@@ -1,4 +1,4 @@
-import SocialAuthForm from "@/components/forms/socialAuthForm";
+import SocialAuthForm from "@/components/forms/SocialAuthForm";
 import Image from "next/image";
 import React from "react";
 
