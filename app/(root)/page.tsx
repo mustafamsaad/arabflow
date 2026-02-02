@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import LocalSearch from "@/components/search/LocalSearch";
+import HomeFilter from "@/components/filters/HomeFilter";
 
 const questions = [
   {
     _id: 1,
     title: "How to learn Next.js?",
-    tags: ["tag1", "tag2"],
+    tags: ["Next.js"],
     author: "Author 1",
     upvotes: 10,
     answers: 5,
@@ -17,7 +18,7 @@ const questions = [
   {
     _id: 2,
     title: "How to learn React.js?",
-    tags: ["tag1", "tag2"],
+    tags: ["React"],
     author: "Author 1",
     upvotes: 10,
     answers: 5,
@@ -27,7 +28,7 @@ const questions = [
   {
     _id: 3,
     title: "How to learn Node.js?",
-    tags: ["tag1", "tag2"],
+    tags: ["Node.js"],
     author: "Author 1",
     upvotes: 10,
     answers: 5,
@@ -37,7 +38,7 @@ const questions = [
   {
     _id: 4,
     title: "How to learn Python?",
-    tags: ["tag1", "tag2"],
+    tags: ["Python"],
     author: "Author 1",
     upvotes: 10,
     answers: 5,
@@ -47,7 +48,7 @@ const questions = [
   {
     _id: 5,
     title: "How to learn JavaScript?",
-    tags: ["tag1", "tag2"],
+    tags: ["JavaScript"],
     author: "Author 1",
     upvotes: 10,
     answers: 5,
@@ -61,10 +62,18 @@ const Home = async ({
 }: {
   searchParams: Promise<{ [key: string]: string }>;
 }) => {
-  const { query = "" } = await searchParams;
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query.toLowerCase()),
-  );
+  const { query = "", filter = "" } = await searchParams;
+  // Normalize string by removing non-alphanumeric characters
+  const normalize = (str: string) =>
+    str.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  const filteredQuestions = questions.filter((question) => {
+    const matchedQuery = normalize(question.title).includes(normalize(query));
+    const matchedFilter = normalize(question.tags[0]).includes(
+      normalize(filter),
+    );
+    return matchedQuery && matchedFilter;
+  });
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-8 sm:flex-row">
@@ -87,7 +96,7 @@ const Home = async ({
           route={ROUTES.HOME}
         />
       </section>
-      Home filter
+      <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
           <p key={question._id}>{question.title}</p>
