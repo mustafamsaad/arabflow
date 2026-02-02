@@ -4,6 +4,7 @@ const ROUTES = {
   SIGN_UP: "/sign-up",
   QUESTIONS: (id: string) => `/questions/${id}`,
   TAGS: (id: string) => `/popular-tags/${id}`,
+  ASK_QUESTION: "/ask-question",
 };
 
 export default ROUTES;

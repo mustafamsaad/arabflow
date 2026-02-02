@@ -18,8 +18,10 @@ const Navbar = () => {
         </p>
       </Link>
       <p>Global search</p>
-      <Theme />
-      <MobileNavigation />
+      <div className="flex-between gap-5">
+        <Theme />
+        <MobileNavigation />
+      </div>
     </nav>
   );
 };
