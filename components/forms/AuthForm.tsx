@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
+import { ZodType } from "zod";
 import {
   useForm,
   Controller,
@@ -10,6 +10,7 @@ import {
   DefaultValues,
   SubmitHandler,
   Path,
+  Resolver,
 } from "react-hook-form";
 import {
   Field,
@@ -23,7 +24,7 @@ import ROUTES from "@/constants/routes";
 
 interface AuthFormProps<T extends FieldValues> {
   formType: "SIGN_IN" | "SIGN_UP";
-  schema: z.ZodType<T>;
+  schema: ZodType<T, T>;
   defaultValues: T;
   onSubmit: (data: T) => Promise<{ success: boolean }>;
 }
@@ -34,8 +35,8 @@ const AuthForm = <T extends FieldValues>({
   schema,
   formType,
 }: AuthFormProps<T>) => {
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const form = useForm<T>({
+    resolver: zodResolver(schema) as Resolver<T>,
     defaultValues: defaultValues as DefaultValues<T>,
   });
 

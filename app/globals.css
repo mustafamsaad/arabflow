@@ -390,12 +390,44 @@
   display: block;
 }
 
-.mdxeditor-toolbar {
-  background: #ffffff !important;
+/* ═══════════════════════════════════════════════════════════════
+   MDXEditor – Dark Mode
+   
+   KEY INSIGHT: MDXEditor uses CSS variables (--basePageBg, --baseBg, 
+   --baseText, etc.) that reference --slate-* color scales. The slate
+   scale automatically changes when .dark-theme class is present.
+   BUT --basePageBg is hardcoded as "white" and never switches.
+   
+   The FIX: Override --basePageBg in dark mode. This single change
+   fixes toolbar, selects, dropdowns, and popups — all at once.
+   This is working WITH the library's theme system, not against it.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Override the hardcoded --basePageBg for dark mode */
+.dark .dark-editor,
+.dark .dark-theme {
+  --basePageBg: #151821;
 }
 
-.dark .mdxeditor-toolbar {
-  background: #151821 !important;
+/* ── Toolbar – responsive horizontal scroll on small screens ─── */
+.mdxeditor-toolbar {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  flex-wrap: nowrap !important;
+  scrollbar-width: thin;
+}
+
+.mdxeditor-toolbar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.mdxeditor-toolbar::-webkit-scrollbar-thumb {
+  background: #c8cdd8;
+  border-radius: 4px;
+}
+
+.dark .mdxeditor-toolbar::-webkit-scrollbar-thumb {
+  background: #555;
 }
 
 .dark .mdxeditor-toolbar button svg {
@@ -408,6 +440,124 @@
 
 .dark .mdxeditor-toolbar [role="separator"] {
   border-color: #555 !important;
+}
+
+/* ── Editor content area – dark mode ──────────────────────────── */
+.dark .mdxeditor-root-contenteditable {
+  background: #151821 !important;
+  color: #c8cdd8 !important;
+}
+
+/* ── Link dialog & all floating popups – dark mode ───────────── */
+.dark .mdxeditor-popup-container {
+  background: #1e2230 !important;
+  color: #c8cdd8 !important;
+  border-color: #3a3f4b !important;
+}
+
+.dark .mdxeditor-popup-container form {
+  background: #1e2230 !important;
+}
+
+.dark .mdxeditor-popup-container input,
+.dark .mdxeditor-popup-container textarea {
+  background: #151821 !important;
+  color: #c8cdd8 !important;
+  border-color: #3a3f4b !important;
+}
+
+.dark .mdxeditor-popup-container input::placeholder {
+  color: #858ead !important;
+}
+
+.dark .mdxeditor-popup-container button {
+  color: #c8cdd8 !important;
+}
+
+.dark .mdxeditor-popup-container button:hover {
+  background: #2a2f3e !important;
+}
+
+.dark .mdxeditor-popup-container a {
+  color: #ff7000 !important;
+}
+
+/* ── Code block styling inside editor ────────────────────────── */
+.dark .mdxeditor-root-contenteditable pre {
+  background: #0d1117 !important;
+  color: #c9d1d9 !important;
+}
+
+.dark .mdxeditor-root-contenteditable code {
+  background: #0d1117 !important;
+  color: #ff7000 !important;
+}
+
+/* ── CodeMirror inside the editor – dark mode ────────────────── */
+.dark .cm-editor {
+  background: #0d1117 !important;
+}
+
+.dark .cm-editor .cm-gutters {
+  background: #0d1117 !important;
+  border-color: #1e2230 !important;
+  color: #858ead !important;
+}
+
+.dark .cm-editor .cm-content {
+  color: #c9d1d9 !important;
+}
+
+.dark .cm-editor .cm-activeLine,
+.dark .cm-editor .cm-activeLineGutter {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ── Select dropdowns (language picker, block type, etc.) ────── */
+/* FIX: Add max-height + scroll so long language lists are usable */
+.mdxeditor-select-content {
+  max-height: 250px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+}
+
+.mdxeditor-select-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mdxeditor-select-content::-webkit-scrollbar-thumb {
+  background: #c8cdd8;
+  border-radius: 4px;
+}
+
+.dark .mdxeditor-select-content::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+/* Dark mode for select trigger & dropdown items */
+.dark .mdxeditor-select-content {
+  background: #1e2230 !important;
+  color: #c8cdd8 !important;
+  border-color: #3a3f4b !important;
+}
+
+/* Style the language label inside code blocks */
+.dark [class*="selectWithLabel"] label {
+  color: #858ead !important;
+}
+
+.dark [class*="selectTrigger"] {
+  color: #c8cdd8 !important;
+  border-color: #3a3f4b !important;
+}
+
+.dark [class*="selectItem"][data-highlighted] {
+  background: #2a2f3e !important;
+}
+
+.dark [class*="selectItem"][data-state="checked"] {
+  background: #2a2f3e !important;
+  color: #ff7000 !important;
 }
 
 .markdown a {
@@ -449,8 +599,12 @@ code {
   color: inherit !important;
 }
 
+/* Editor content area – fixed height with scrolling.
+   overflow-y: auto clips native <select> dropdowns inside code blocks.
+   We use clip instead to allow native dropdowns to escape while still
+   enabling scroll behavior on the content. */
 [data-lexical-editor="true"] {
-  height: 350px !important;
+  min-height: 350px !important;
   overflow-y: auto !important;
 }
 
