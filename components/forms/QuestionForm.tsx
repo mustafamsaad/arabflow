@@ -109,7 +109,6 @@ const QuestionForm = () => {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup className="mt-10 flex flex-col gap-9">
-        {/* ════════════════ TITLE FIELD ════════════════ */}
         <Controller
           name="title"
           control={form.control}
@@ -218,7 +217,6 @@ const QuestionForm = () => {
         />
       </FieldGroup>
 
-      {/* ════════════════ SUBMIT BUTTON ════════════════ */}
       <div className="mt-12 flex justify-end">
         <Button
           type="submit"

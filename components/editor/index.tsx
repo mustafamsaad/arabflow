@@ -26,15 +26,6 @@ import {
 } from "@mdxeditor/editor";
 import { useTheme } from "next-themes";
 
-// ─── WHY two plugins for code blocks? ──────────────────────────────
-// codeBlockPlugin  → handles the MARKDOWN AST (parsing ``` blocks)
-// codeMirrorPlugin → provides the EDITOR UI (syntax highlighting, language picker)
-//
-// This is "separation of concerns" in a plugin architecture:
-// One plugin owns the data model, the other owns the view.
-// Without codeMirrorPlugin, MDXEditor knows code blocks EXIST
-// but has no component to RENDER them — hence the error.
-
 const Editor = ({
   editorRef,
   markdown,
