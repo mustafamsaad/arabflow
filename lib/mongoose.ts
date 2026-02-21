@@ -1,4 +1,5 @@
 import mongoose, { Mongoose } from "mongoose";
+import logger from "./logger";
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
@@ -21,17 +22,20 @@ if (!cached) {
   cached = globalThis.mongoose = { conn: null, promise: null };
 }
 const dbConnect = async () => {
-  if (cached.conn) return cached.conn;
+  if (cached.conn) {
+    logger.info("Using cached connection to database");
+    return cached.conn;
+  }
   cached.promise ??= mongoose
     .connect(MONGODB_URI, {
       dbName: "arabflow",
     })
     .then((result) => {
-      console.log("Connected to database");
+      logger.info("Connected to database");
       return result;
     })
     .catch((error) => {
-      console.error("Error connecting to database", error);
+      logger.error("Error connecting to database", error);
       throw error;
     });
   cached.conn = await cached.promise;
