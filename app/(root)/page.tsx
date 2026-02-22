@@ -4,7 +4,6 @@ import ROUTES from "@/constants/routes";
 import LocalSearch from "@/components/search/LocalSearch";
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
-import logger from "@/lib/logger";
 const questions: Question[] = [
   {
     _id: "1",

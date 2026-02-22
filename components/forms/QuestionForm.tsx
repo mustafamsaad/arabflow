@@ -221,7 +221,7 @@ const QuestionForm = () => {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="primary-gradient !text-light-900 w-fit cursor-pointer px-10 py-3"
+          className="primary-gradient text-light-900! w-fit cursor-pointer px-10 py-3"
         >
           {isSubmitting ? "Posting..." : "Ask a Question"}
         </Button>
