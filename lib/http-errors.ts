@@ -32,6 +32,7 @@ export class ValidationError extends RequestError {
     const formattedMessage = Object.entries(fieldErrors).map(
       ([field, messages]) => {
         const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
+        console.log("Messages:::>", messages);
 
         if (messages[0] === "Required") {
           return `${fieldName} is required`;

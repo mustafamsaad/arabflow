@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { zhCN } from "zod/v4/locales";
 
 export const SignInSchema = z.object({
   email: z.email({ message: "Invalid email address" }).min(1, {

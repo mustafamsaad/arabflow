@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/ArabFlow
 
 # next.js
 /.next/
