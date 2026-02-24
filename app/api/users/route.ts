@@ -22,7 +22,6 @@ export async function POST(request: Request) {
     await dbConnect();
     const body = await request.json();
     const validatedData = UserSchema.safeParse(body);
-    logger.info(validatedData);
     if (!validatedData.success) {
       throw new ValidationError(flattenError(validatedData.error).fieldErrors);
     }

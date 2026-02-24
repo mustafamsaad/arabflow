@@ -4,6 +4,7 @@ import dbConnect from "@/lib/mongoose";
 import User from "@/database/user.model";
 import { NextResponse } from "next/server";
 import { UserSchema } from "@/lib/validations";
+import { flattenError } from "zod";
 
 // GET /api/users/[id]
 export async function GET(
@@ -32,7 +33,11 @@ export async function PUT(
   try {
     await dbConnect();
     const body = await request.json();
-    const validatedData = UserSchema.partial().parse(body);
+    const validatedData = UserSchema.partial().safeParse(body);
+    if (!validatedData.success) {
+      throw new ValidationError(flattenError(validatedData.error).fieldErrors);
+    }
+
     const updatedUser = await User.findByIdAndUpdate(id, validatedData, {
       new: true,
     });
