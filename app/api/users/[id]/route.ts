@@ -38,7 +38,7 @@ export async function PUT(
       throw new ValidationError(flattenError(validatedData.error).fieldErrors);
     }
 
-    const updatedUser = await User.findByIdAndUpdate(id, validatedData, {
+    const updatedUser = await User.findByIdAndUpdate(id, validatedData.data, {
       new: true,
     });
     if (!updatedUser) throw new NotFoundError("User");

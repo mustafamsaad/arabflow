@@ -23,3 +23,5 @@ const accountSchema = new Schema<IAccount>({
 });
 
 const Account = models.Account || model<IAccount>("Account", accountSchema);
+
+export default Account;
