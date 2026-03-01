@@ -2,7 +2,7 @@ import { handleError } from "@/lib/handlers/error";
 import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { NextResponse } from "next/server";
-import { AccountSchema, UserSchema } from "@/lib/validations";
+import { AccountSchema } from "@/lib/validations";
 import { flattenError } from "zod";
 import Account from "@/database/account.model";
 
