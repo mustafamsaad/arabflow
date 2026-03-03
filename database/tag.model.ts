@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-interface ITag {
+export interface ITag {
   name: string;
   numberOfQuestions: number;
 }

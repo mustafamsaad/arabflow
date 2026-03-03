@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-interface ICollection {
+export interface ICollection {
   userId: Schema.Types.ObjectId;
   questions: Schema.Types.ObjectId[];
 }

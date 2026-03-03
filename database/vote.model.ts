@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-interface IVote {
+export interface IVote {
   userId: Schema.Types.ObjectId;
   type: "question" | "answer";
   voteType: "upvote" | "downvote";

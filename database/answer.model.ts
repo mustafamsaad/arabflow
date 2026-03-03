@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-interface IAnswer {
+export interface IAnswer {
   content: string;
   question: Schema.Types.ObjectId;
   author: Schema.Types.ObjectId;

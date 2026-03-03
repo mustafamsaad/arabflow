@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-interface IInteraction {
+export interface IInteraction {
   userId: Schema.Types.ObjectId;
   action: string;
   actionId: Schema.Types.ObjectId;

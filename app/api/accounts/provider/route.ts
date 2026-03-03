@@ -7,9 +7,9 @@ import { AccountSchema } from "@/lib/validations";
 import { flattenError } from "zod";
 
 export async function POST(request: Request) {
+  const { providerAccountId } = await request.json();
   try {
     await dbConnect();
-    const { providerAccountId } = await request.json();
     const validatedData = AccountSchema.partial().safeParse({
       providerAccountId,
     });
