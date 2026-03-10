@@ -1,7 +1,96 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import { api } from "@/lib/api";
+import { IAccountDoc } from "@/database/account.model";
+import Credentials from "next-auth/providers/credentials";
+import { SignInSchema } from "@/lib/validations";
+import { IUserDoc } from "@/database/user.model";
+import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [GitHub, Google],
+  providers: [
+    GitHub,
+    Google,
+    Credentials({
+      authorize: async (credentials) => {
+        const validatedData = SignInSchema.safeParse(credentials);
+        if (!validatedData.success) return null;
+
+        const { email, password } = validatedData.data;
+        const { data: existingAccount } = (await api.accounts.getByProvider(
+          email,
+        )) as ActionResponse<IAccountDoc>;
+        if (!existingAccount) return null;
+
+        const { data: existingUser } = (await api.users.getById(
+          existingAccount.userId.toString(),
+        )) as ActionResponse<IUserDoc>;
+        if (!existingUser) return null;
+
+        const isValidPassword = await bcrypt.compare(
+          password,
+          existingAccount.password!,
+        );
+
+        if (isValidPassword) {
+          return {
+            id: existingUser._id.toString(),
+            name: existingUser.name,
+            email: existingUser.email,
+            image: existingUser.image,
+          };
+        }
+        return null;
+      },
+    }),
+  ],
+
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        const { data: existingAccount, success } =
+          (await api.accounts.getByProvider(
+            account.provider === "credentials"
+              ? token.email!
+              : account.providerAccountId!,
+          )) as ActionResponse<IAccountDoc>;
+
+        if (!existingAccount || !success) return token;
+
+        const userId = existingAccount.userId.toString();
+
+        if (userId) token.sub = userId;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user.id = token.sub as string;
+      return session;
+    },
+
+    async signIn({ user, profile, account }) {
+      if (account?.type === "credentials") return true;
+      if (!account || !user) return false;
+
+      const userInfo = {
+        name: user.name!,
+        email: user.email!,
+        image: user.image!,
+        username:
+          account.provider === "github"
+            ? (profile?.login as string)
+            : (user.name?.toLowerCase() as string),
+      };
+
+      const { success } = (await api.auth.signinWithOAuth({
+        user: userInfo,
+        provider: account.provider as "github" | "google",
+        providerAccountId: account.providerAccountId!,
+      })) as ActionResponse;
+
+      return success;
+    },
+  },
 });

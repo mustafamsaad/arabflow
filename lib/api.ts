@@ -1,7 +1,9 @@
 import { fetchHandler } from "./handlers/fetch";
 import { IUser } from "@/database/user.model";
 import { IAccount } from "@/database/account.model";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import ROUTES from "@/constants/routes";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
 
 export const api = {
   users: {
@@ -31,7 +33,7 @@ export const api = {
     getAll: async () => fetchHandler(`${API_BASE_URL}/accounts`),
     getById: async (id: string) =>
       fetchHandler(`${API_BASE_URL}/accounts/${id}`),
-    getByProviderAccountId: async (providerAccountId: string) =>
+    getByProvider: async (providerAccountId: string) =>
       fetchHandler(`${API_BASE_URL}/accounts/provider`, {
         method: "POST",
         body: JSON.stringify({ providerAccountId }),
@@ -49,6 +51,17 @@ export const api = {
     delete: async (id: string) =>
       fetchHandler(`${API_BASE_URL}/accounts/${id}`, {
         method: "DELETE",
+      }),
+  },
+  auth: {
+    signinWithOAuth: async ({
+      provider,
+      providerAccountId,
+      user,
+    }: SignInWithOAuthParams) =>
+      fetchHandler(`${API_BASE_URL}${ROUTES.SIGN_IN_WITH_OAUTH}`, {
+        method: "POST",
+        body: JSON.stringify({ provider, providerAccountId, user }),
       }),
   },
 };

@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 
 export interface IQuestion {
   title: string;
@@ -9,6 +9,8 @@ export interface IQuestion {
   downvotes: number;
   answers: number;
 }
+
+export interface IQuestionDoc extends IQuestion, Document {}
 
 const questionSchema = new Schema<IQuestion>(
   {
