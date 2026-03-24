@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { ZodType } from "zod";
 import {
   useForm,
   Controller,
@@ -21,29 +20,44 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { SignInSchema, SignUpSchema } from "@/lib/validations";
+
+const SCHEMAS = {
+  SIGN_IN: SignInSchema,
+  SIGN_UP: SignUpSchema
+};
 
 interface AuthFormProps<T extends FieldValues> {
   formType: "SIGN_IN" | "SIGN_UP";
-  schema: ZodType<T, T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
 }
 
 const AuthForm = <T extends FieldValues>({
   defaultValues,
   onSubmit,
-  schema,
   formType,
 }: AuthFormProps<T>) => {
+  const router = useRouter();
   const form = useForm<T>({
-    resolver: zodResolver(schema) as Resolver<T>,
+    resolver: zodResolver(SCHEMAS[formType]) as unknown as Resolver<T>,
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
   const submitHandler: SubmitHandler<T> = async (data) => {
     const result = await onSubmit(data);
-    if (result.success) {
+    if (result?.success) {
       form.reset();
+      toast.success(
+        formType === "SIGN_IN"
+          ? "Signed in successfully"
+          : "Signed up successfully",
+      );
+      router.push(ROUTES.HOME);
+    } else {
+      toast.error(result?.error?.message || "An error occurred");
     }
   };
 

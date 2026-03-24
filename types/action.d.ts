@@ -3,3 +3,10 @@ interface SignInWithOAuthParams {
   providerAccountId: string;
   user: { email: string; name: string; image: string; username: string };
 }
+
+interface AuthCredentials {
+  email: string;
+  password: string;
+  name: string;
+  username: string;
+}
