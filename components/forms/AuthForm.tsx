@@ -26,7 +26,7 @@ import { SignInSchema, SignUpSchema } from "@/lib/validations";
 
 const SCHEMAS = {
   SIGN_IN: SignInSchema,
-  SIGN_UP: SignUpSchema
+  SIGN_UP: SignUpSchema,
 };
 
 interface AuthFormProps<T extends FieldValues> {

@@ -5,6 +5,7 @@ import action from "@/lib/handlers/action";
 import { SignInSchema, SignUpSchema } from "../validations";
 import mongoose from "mongoose";
 import User from "@/database/user.model";
+import { NotFoundError } from "@/lib/http-errors";
 import bcrypt from "bcryptjs";
 import Account from "@/database/account.model";
 import { signIn } from "@/auth";
@@ -19,6 +20,18 @@ export async function signInWithCredentials(
   const { email, password } = validatedResult.params!;
 
   try {
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) throw new NotFoundError("User");
+
+    const existingAccount = await Account.findOne({ userId: existingUser._id });
+    if (!existingAccount) throw new NotFoundError("Account");
+
+    const isValidPassword = await bcrypt.compare(
+      password,
+      existingAccount.password,
+    );
+    if (!isValidPassword) throw new Error("Invalid credentials");
+
     await signIn("credentials", { email, password, redirect: false });
     return { success: true };
   } catch (error) {
