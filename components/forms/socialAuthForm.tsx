@@ -27,7 +27,7 @@ const SocialAuthForm = () => {
   };
 
   return (
-    <div className="mt-10 flex flex-wrap gap-2.5">
+    <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8">
       <Button className={ButtonClass} onClick={() => handleSignIn("github")}>
         <Image
           src="/icons/github.svg"

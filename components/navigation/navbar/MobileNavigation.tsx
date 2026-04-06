@@ -12,7 +12,7 @@ import ROUTES from "@/constants/routes";
 import { Button } from "@/components/ui/button";
 import NavLinks from "./NavLinks";
 
-const MobileNavigation = () => {
+const MobileNavigation = ({ userId }: { userId?: string }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -45,7 +45,7 @@ const MobileNavigation = () => {
         <div className="no-scrollbar flex h-[calc(100vh-80px)] flex-col justify-between gap-10 overflow-y-auto px-6">
           <SheetClose asChild>
             <section className="flex h-full flex-col gap-6 pt-16">
-              <NavLinks isMobileNav />
+              <NavLinks isMobileNav userId={userId} />
             </section>
           </SheetClose>
           <div className="flex flex-col gap-3 pb-6">

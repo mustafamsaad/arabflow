@@ -7,18 +7,23 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { SheetClose } from "@/components/ui/sheet";
 
-const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
+const NavLinks = ({
+  isMobileNav = false,
+  userId,
+}: {
+  isMobileNav?: boolean;
+  userId?: string;
+}) => {
   const pathName = usePathname();
-  let userId
+  const links = sidebarLinks(userId);
+
   return (
     <>
-      {sidebarLinks.map((item) => {
-        const isActive = pathName === item.route;
-        if (item.route === "/profile") {
-          if (!userId) {
-            return null
-          } 
-        }
+      {links.map((item) => {
+        const isActive =
+          (pathName.includes(item.route) && item.route.length > 1) ||
+          pathName === item.route;
+        if (item.label === "Profile" && !userId) return null;
         const linkComponent = (
           <Link
             href={item.route}

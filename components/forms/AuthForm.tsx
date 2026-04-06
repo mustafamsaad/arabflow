@@ -65,7 +65,7 @@ const AuthForm = <T extends FieldValues>({
 
   return (
     <form id="form-rhf-demo" onSubmit={form.handleSubmit(submitHandler)}>
-      <FieldGroup className="mt-10">
+      <FieldGroup className="mt-6 sm:mt-8">
         {Object.keys(defaultValues).map((inputField) => (
           <Controller
             key={inputField}

@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     const { email, name, image, username } = validatedData.data.user;
 
-    const slugifiedUsername = slugify(username, {
+    let slugifiedUsername = slugify(username, {
       lower: true,
       strict: true,
       trim: true,
@@ -42,6 +42,13 @@ export async function POST(request: Request) {
       existingUser.image = image;
       await existingUser.save({ session });
     } else {
+      const existingUsername = await User.findOne({
+        username: slugifiedUsername,
+      }).session(session);
+      if (existingUsername) {
+        slugifiedUsername = `${slugifiedUsername}-${Date.now().toString(36)}`;
+      }
+
       [existingUser] = await User.create(
         [
           {

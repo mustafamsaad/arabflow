@@ -1,7 +1,9 @@
-export const sidebarLinks = [
+import ROUTES from "./routes";
+
+export const sidebarLinks = (userId?: string) => [
   {
     imgURL: "/icons/home.svg",
-    route: "/",
+    route: ROUTES.HOME,
     label: "Home",
   },
   {
@@ -26,12 +28,12 @@ export const sidebarLinks = [
   },
   {
     imgURL: "/icons/user.svg",
-    route: "/profile",
+    route: userId ? ROUTES.PROFILE(userId) : "/profile",
     label: "Profile",
   },
   {
     imgURL: "/icons/question.svg",
-    route: "/ask-question",
+    route: ROUTES.ASK_QUESTION,
     label: "Ask a question",
   },
 ];
