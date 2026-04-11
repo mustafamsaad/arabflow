@@ -43,7 +43,7 @@ const Editor = ({
       key={isDark ? "dark" : "light"}
       markdown={markdown}
       onChange={onChange}
-      className={`markdown-editor light-border-2 rounded-1.5 overflow-hidden ${isDark ? "dark-theme dark-editor" : ""}`}
+      className={`markdown-editor light-border-2 rounded-1.5 overflow-clip ${isDark ? "dark-theme dark-editor" : ""}`}
       plugins={[
         headingsPlugin(),
         listsPlugin(),

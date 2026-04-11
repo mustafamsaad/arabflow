@@ -14,7 +14,7 @@ const action = async <T>({
   params,
   schema,
   authorize = false,
-}: ActionParams<T>): Promise<{ params?: T; session?: unknown } | Error> => {
+}: ActionParams<T>): Promise<{ params?: T; session?: Session | null } | Error> => {
   if (schema && params) {
     const result = schema.safeParse(params);
     if (!result.success) {

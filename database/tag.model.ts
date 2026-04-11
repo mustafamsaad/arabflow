@@ -9,7 +9,7 @@ export interface ITagDoc extends ITag, Document {}
 
 const tagSchema = new Schema<ITag>(
   {
-    name: { type: String, required: true, unique: true },
+    name: { type: String, required: true, unique: true, trim: true, lowercase: true },
     numberOfQuestions: { type: Number, default: 0 },
   },
   { timestamps: true },

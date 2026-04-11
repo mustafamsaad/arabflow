@@ -17,7 +17,7 @@ const QuestionCard = ({
         {getTimeAgo(createdAt)}
       </span>
 
-      <Link href={ROUTES.QUESTIONS(_id)}>
+      <Link href={ROUTES.QUESTION(_id)}>
         <h3 className="sm:h3-semibold base-semibold line-clamp-1">{title}</h3>
       </Link>
 

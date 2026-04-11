@@ -482,6 +482,16 @@
   color: #ff7000 !important;
 }
 
+/* ── Links inside editor content ──────────────────────────────── */
+.mdxeditor-root-contenteditable a {
+  color: #1d4ed8 !important;
+  text-decoration: underline;
+}
+
+.dark .mdxeditor-root-contenteditable a {
+  color: #ff7000 !important;
+}
+
 /* ── Code block styling inside editor ────────────────────────── */
 .dark .mdxeditor-root-contenteditable pre {
   background: #0d1117 !important;

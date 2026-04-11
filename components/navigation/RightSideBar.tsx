@@ -65,7 +65,7 @@ const RightSideBar = () => {
           {topQuestions.map(({ _id, title }) => (
             <Link
               key={_id}
-              href={ROUTES.QUESTIONS(_id)}
+              href={ROUTES.QUESTION(_id)}
               className="flex justify-between gap-4"
             >
               <p className="body-medium text-dark500_light700">{title}</p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { type KeyboardEvent, useRef, useState } from "react";
+import { type KeyboardEvent, useRef, useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { type MDXEditorMethods } from "@mdxeditor/editor";
 import { toast } from "sonner";
+import { LoaderIcon } from "lucide-react";
 
 import {
   Field,
@@ -20,6 +21,9 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AskQuestionSchema } from "@/lib/validations";
+import { createQuestion } from "@/lib/actions/question.action";
+import { useRouter } from "next/navigation";
+import ROUTES from "@/constants/routes";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
@@ -28,9 +32,10 @@ const Editor = dynamic(() => import("@/components/editor"), {
 type QuestionFormValues = z.infer<typeof AskQuestionSchema>;
 
 const QuestionForm = () => {
+  const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
-
   const [tagInput, setTagInput] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<QuestionFormValues>({
     resolver: zodResolver(AskQuestionSchema),
@@ -94,20 +99,24 @@ const QuestionForm = () => {
     }
   };
 
-  const onSubmit = async (data: QuestionFormValues) => {
-    // TODO: Replace with actual server action / API call when backend is ready
-    // For now, we just show a success toast so you can verify the form works
-    try {
-      console.log("Form submitted:", data);
-      toast.success("Question posted successfully!");
-      // form.reset(); // Uncomment when you have a real submission
-    } catch {
-      toast.error("Something went wrong. Please try again.");
-    }
+  const handleCreateQuestion = async (
+    data: z.infer<typeof AskQuestionSchema>,
+  ) => {
+    startTransition(async () => {
+      const result = await createQuestion(data);
+      if (result?.success && result.data?._id) {
+        toast.success("Question posted successfully!");
+        router.push(ROUTES.QUESTION(result.data?._id));
+      } else {
+        toast.error(
+          result?.error?.message || "Something went wrong. Please try again.",
+        );
+      }
+    });
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form onSubmit={form.handleSubmit(handleCreateQuestion)}>
       <FieldGroup className="mt-10 flex flex-col gap-9">
         <Controller
           name="title"
@@ -220,10 +229,17 @@ const QuestionForm = () => {
       <div className="mt-12 flex justify-end">
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isPending}
           className="primary-gradient text-light-900! w-fit cursor-pointer px-10 py-3"
         >
-          {isSubmitting ? "Posting..." : "Ask a Question"}
+          {isPending ? (
+            <>
+              <LoaderIcon className="mr-2 size-4 animate-spin" />
+              <span>Submitting...</span>
+            </>
+          ) : (
+            <>Ask a Question</>
+          )}
         </Button>
       </div>
     </form>

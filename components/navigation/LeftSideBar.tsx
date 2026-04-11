@@ -14,7 +14,7 @@ const LeftSideBar = async () => {
       <div className="flex flex-col gap-6">
         <NavLinks userId={userId} />
       </div>
-      <div className="flex flex-col gap-3 max-lg:mt-6">
+      <div className="mt-6 flex flex-col gap-3 max-lg:mt-6">
         {userId ? (
           <form
             action={async () => {
