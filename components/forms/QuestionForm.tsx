@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AskQuestionSchema } from "@/lib/validations";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter } from "next/navigation";
 import ROUTES from "@/constants/routes";
 
@@ -31,7 +31,12 @@ const Editor = dynamic(() => import("@/components/editor"), {
 
 type QuestionFormValues = z.infer<typeof AskQuestionSchema>;
 
-const QuestionForm = () => {
+interface QuestionFormProps {
+  initialData?: Question;
+  isEdit?: boolean;
+}
+
+const QuestionForm = ({ initialData, isEdit }: QuestionFormProps) => {
   const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
   const [tagInput, setTagInput] = useState("");
@@ -40,13 +45,11 @@ const QuestionForm = () => {
   const form = useForm<QuestionFormValues>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      tags: [],
+      title: initialData?.title || "",
+      content: initialData?.content || "",
+      tags: initialData?.tags.map((tag) => tag.name) || [],
     },
   });
-
-  const { isSubmitting } = form.formState;
 
   const handleAddTag = (
     tag: string,
@@ -102,6 +105,25 @@ const QuestionForm = () => {
   const handleCreateQuestion = async (
     data: z.infer<typeof AskQuestionSchema>,
   ) => {
+    if (isEdit && initialData) {
+      startTransition(async () => {
+        const result = await editQuestion({
+          questionId: initialData?._id,
+          ...data,
+        });
+        if (result.success && result.data) {
+          toast.success("Question updated successfully!");
+          router.push(ROUTES.QUESTION(result.data._id));
+        } else {
+          toast.error(
+            result?.error?.message || "Something went wrong. Please try again.",
+          );
+        }
+      });
+
+      return;
+    }
+
     startTransition(async () => {
       const result = await createQuestion(data);
       if (result?.success && result.data?._id) {
@@ -235,10 +257,10 @@ const QuestionForm = () => {
           {isPending ? (
             <>
               <LoaderIcon className="mr-2 size-4 animate-spin" />
-              <span>Submitting...</span>
+              <span>{isEdit ? "Saving..." : "Submitting..."}</span>
             </>
           ) : (
-            <>Ask a Question</>
+            <>{isEdit ? "Save Changes" : "Ask a Question"}</>
           )}
         </Button>
       </div>

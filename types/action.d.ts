@@ -16,3 +16,14 @@ interface CreateQuestionParams {
   content: string;
   tags: string[];
 }
+
+interface EditQuestionParams {
+  questionId: string;
+  title: string;
+  content: string;
+  tags: string[];
+}
+
+interface GetQuestionParams {
+  questionId: string;
+}

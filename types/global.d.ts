@@ -12,6 +12,7 @@ interface Tag {
 interface Question {
   _id: string;
   title: string;
+  content: string;
   tags: Tag[];
   createdAt: Date;
   upvotes: number;
