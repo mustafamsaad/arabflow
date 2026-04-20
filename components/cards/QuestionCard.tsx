@@ -29,7 +29,7 @@ const QuestionCard = ({
 
       <div className="mt-5 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <Metric
-          imgSrc={author.avatar}
+          imgSrc={author.avatar || "/icons/avatar.svg"}
           alt={author.name}
           value={author.name}
           title={`• asked ${getTimeAgo(createdAt)}`}

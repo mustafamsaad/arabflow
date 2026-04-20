@@ -8,9 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getTimeAgo(date: Date | string): string {
   const now = new Date();
   const past = new Date(date);
-  const diffInSeconds = Math.floor(
-    (now.getTime() - past.getTime()) / 1000,
-  );
+  const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
 
   const units: { label: string; seconds: number }[] = [
     { label: "year", seconds: 365 * 24 * 60 * 60 },
@@ -32,12 +30,12 @@ export function getTimeAgo(date: Date | string): string {
   return "just now";
 }
 
-export function formatNumber(number: number): string {
+export function formatNumber(number: number): number | string {
   if (number >= 1000000) {
     return (number / 1000000).toFixed(1).replace(/\.0$/, "") + "m";
   } else if (number >= 1000) {
     return (number / 1000).toFixed(1).replace(/\.0$/, "") + "k";
   } else {
-    return number.toString();
+    return number;
   }
 }
