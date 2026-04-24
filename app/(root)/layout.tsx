@@ -2,15 +2,11 @@ import React from "react";
 import Navbar from "@/components/navigation/navbar";
 import LeftSideBar from "@/components/navigation/LeftSideBar";
 import RightSideBar from "@/components/navigation/RightSideBar";
-import { auth } from "@/auth";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const session = await auth();
-  const userId = session?.user?.id;
-
   return (
     <main className="background-light850_dark100 relative">
-      <Navbar userId={userId} />
+      <Navbar />
       <div className="flex">
         <LeftSideBar />
         <section className="flex min-h-screen min-w-0 flex-1 flex-col px-6 pt-28 pb-6 max-md:pb-14 sm:px-14 md:pt-36">

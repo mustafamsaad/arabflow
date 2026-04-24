@@ -11,6 +11,7 @@ interface Props {
 const QuestionCard = ({
   question: { _id, title, tags, createdAt, author, upvotes, answers, views },
 }: Props) => {
+  console.log(author);
   return (
     <div className="card-wrapper flex w-full flex-col rounded-xl p-9 sm:px-11">
       <span className="subtle-regular text-dark400_light700 sm:hidden">
@@ -29,7 +30,7 @@ const QuestionCard = ({
 
       <div className="mt-5 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <Metric
-          imgSrc={author.avatar || "/icons/avatar.svg"}
+          imgSrc={author.image || "/icons/avatar.svg"}
           alt={author.name}
           value={author.name}
           title={`• asked ${getTimeAgo(createdAt)}`}

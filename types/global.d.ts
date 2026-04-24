@@ -1,12 +1,13 @@
 interface Author {
   _id: string;
   name: string;
-  avatar: string;
+  image: string;
 }
 
 interface Tag {
   _id: string;
   name: string;
+  numberOfQuestions?: number;
 }
 
 interface Question {
