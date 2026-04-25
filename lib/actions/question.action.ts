@@ -273,3 +273,17 @@ export const getQuestions = async (
     return handleError(error) as ErrorResponse;
   }
 };
+
+export const getTopQuestions = async (): Promise<
+  ActionResponse<Question[]>
+> => {
+  try {
+    const questions = await Question.find({})
+      .lean()
+      .sort({ views: -1 })
+      .limit(5);
+    return { success: true, data: JSON.parse(JSON.stringify(questions)) };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};

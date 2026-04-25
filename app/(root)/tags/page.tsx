@@ -57,9 +57,9 @@ const Tags = async ({ searchParams }: SearchParams) => {
               <TagCard
                 key={tag._id}
                 _id={tag._id}
-                title={tag.name}
-                questions={tag.numberOfQuestions}
-                showCount
+                name={tag.name}
+                numberOfQuestions={tag.numberOfQuestions}
+                showCount={true}
                 compact={false}
               />
             ))}

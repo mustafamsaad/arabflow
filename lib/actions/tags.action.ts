@@ -60,3 +60,12 @@ export const getTags = async (
     return handleError(error) as ErrorResponse;
   }
 };
+
+export const getPopularTags = async (): Promise<ActionResponse<Tag[]>> => {
+  try {
+    const tags = await Tag.find({}).sort({ numberOfQuestions: -1 }).limit(5);
+    return { success: true, data: JSON.parse(JSON.stringify(tags)) };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
