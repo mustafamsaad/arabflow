@@ -199,10 +199,12 @@ export const getQuestion = async (
   const { questionId } = validatedResult.params!;
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await Question.findById(questionId)
+      .populate("tags")
+      .lean();
     if (!question) throw new Error("Question not found");
 
-    return { success: true, data: JSON.parse(JSON.stringify(question)) };
+    return { success: true, data: question };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
@@ -259,15 +261,15 @@ export const getQuestions = async (
     const questions = await Question.find(filterQuery)
       .populate("tags", "name")
       .populate("author", "name image")
-      .lean()
       .sort(sortCriteria)
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     const isNext = totalQuestions > skip + limit;
     return {
       success: true,
-      data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+      data: { questions, isNext },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
@@ -279,10 +281,10 @@ export const getTopQuestions = async (): Promise<
 > => {
   try {
     const questions = await Question.find({})
-      .lean()
       .sort({ views: -1 })
-      .limit(5);
-    return { success: true, data: JSON.parse(JSON.stringify(questions)) };
+      .limit(5)
+      .lean();
+    return { success: true, data: questions };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
