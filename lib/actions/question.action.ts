@@ -200,7 +200,8 @@ export const getQuestion = async (
 
   try {
     const question = await Question.findById(questionId)
-      .populate("tags")
+      .populate("tags", "_id name")
+      .populate("author", "_id name image")
       .lean();
     if (!question) throw new Error("Question not found");
 
