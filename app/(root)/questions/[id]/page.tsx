@@ -11,6 +11,7 @@ import QuestionVoting from "@/components/questions/QuestionVoting";
 import AllAnswers from "@/components/answers/AllAnswers";
 import Preview from "@/components/Preview";
 import { formatNumber, getTimeAgo } from "@/lib/utils";
+import View from "./view";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -33,6 +34,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   return (
     <>
+      <View questionId={id}/>
       <div className="flex-start w-full flex-col">
         <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
           <div className="flex items-center gap-1">

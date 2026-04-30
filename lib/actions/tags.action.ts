@@ -55,7 +55,7 @@ export const getTags = async (
     const isNext = totalTags > skip + limit;
     return {
       success: true,
-      data: { tags: tags, isNext },
+      data: { tags, isNext },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

@@ -6,11 +6,13 @@ import action from "../handlers/action";
 import {
   AskQuestionSchema,
   EditQuestionSchema,
-  GetQuestionSchema,
-  PaginatedSearchSchema,
+  GetQuestionSchema, IncrementViewsSchema,
+  PaginatedSearchSchema
 } from "../validations";
 import { Question, Tag, TagQuestion } from "@/database";
 import { ITagDoc } from "@/database/tag.model";
+import { revalidatePath } from "next/cache";
+import ROUTES from "@/constants/routes";
 
 export const createQuestion = async (
   params: CreateQuestionParams,
@@ -286,6 +288,34 @@ export const getTopQuestions = async (): Promise<
       .limit(5)
       .lean();
     return { success: true, data: questions };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const incrementViews = async (
+  params: IncrementViewsParams,
+): Promise<ActionResponse<{ views: number }>> => {
+  const validatedResult = await action({
+    params,
+    schema: IncrementViewsSchema,
+  });
+
+  if (validatedResult instanceof Error)
+    return handleError(validatedResult) as ErrorResponse;
+
+  const { questionId } = validatedResult.params!;
+
+  try {
+    const question = await Question.findById(questionId);
+    if (!question) throw new Error("Question not found");
+
+    question.views += 1;
+    await question.save();
+
+    revalidatePath(ROUTES.QUESTION(questionId))
+
+    return { success: true, data: { views: question.views } };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
