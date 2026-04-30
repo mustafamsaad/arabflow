@@ -2,10 +2,12 @@ import React from "react";
 import Navbar from "@/components/navigation/navbar";
 import LeftSideBar from "@/components/navigation/LeftSideBar";
 import RightSideBar from "@/components/navigation/RightSideBar";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="background-light850_dark100 relative">
+      <ScrollToTop />
       <Navbar />
       <div className="flex">
         <LeftSideBar />

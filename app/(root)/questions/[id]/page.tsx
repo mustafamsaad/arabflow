@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
+import {after} from "next/server";
 import ROUTES from "@/constants/routes";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import UserAvatar from "@/components/UserAvatar";
 import Metric from "@/components/Metric";
 import TagCard from "@/components/cards/TagCard";
@@ -11,7 +11,6 @@ import QuestionVoting from "@/components/questions/QuestionVoting";
 import AllAnswers from "@/components/answers/AllAnswers";
 import Preview from "@/components/Preview";
 import { formatNumber, getTimeAgo } from "@/lib/utils";
-import View from "./view";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -19,6 +18,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   const { success, data: question } = await getQuestion({ questionId: id });
   if (!success || !question) return notFound();
+
+  after(() => {
+    incrementViews({ questionId: id });
+  })
 
   const {
     author,
@@ -34,7 +37,6 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   return (
     <>
-      <View questionId={id}/>
       <div className="flex-start w-full flex-col">
         <div className="flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
           <div className="flex items-center gap-1">
